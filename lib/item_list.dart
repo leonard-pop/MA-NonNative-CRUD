@@ -107,7 +107,28 @@ class FoodListItem extends StatelessWidget {
         );
       },
       onLongPress: () {
-        parent_list.deleteItem(item);
+        showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              title: Text("Delete Confirmation"),
+              content: Text("Delete item?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    parent_list.deleteItem(item);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Yes")),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("No"))
+              ]
+            );
+          }
+        );
       },
     );
   }
