@@ -1,73 +1,64 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'item_details.dart';
 
 class ListPage extends StatelessWidget {
-  Drawer buildDrawer(BuildContext context) {
-    ListTile buildNavItem(var icon, String label, String route) {
-      return ListTile(
-        leading: Icon(icon),
-        title: Text(label),
-        onTap: () {
-          // FIXME: Need Stateful Widget
-          // setState(() {
-          //   Navigator.of(context).pop();
-          //   Navigator.of(context).pushNamed(route);
-          // });
-        },
-      );
-    }
-
-    var navList = [
-      buildNavItem(Icons.home, "Home", "/"),
-      buildNavItem(Icons.settings, "Settings", "/contact_details"),
-      buildNavItem(Icons.account_balance_wallet, "Account", "/account"),
-    ];
-
-    ListView listView = ListView(children: navList);
-
-    return Drawer(child: listView);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Food Items"),
+          title: Text("All items"),
         ),
-        drawer: buildDrawer(context),
         body: Container(
           child: FoodList(dummyContent),
         ));
   }
 }
 
-class FoodList extends StatelessWidget {
+class FoodList extends StatefulWidget {
   final List<FoodItem> _food_items;
 
   FoodList(this._food_items);
 
   @override
+  State<StatefulWidget> createState() => _FoodListState();
+}
+
+class _FoodListState extends State<FoodList> {
+  _FoodListState();
+
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      itemCount: _food_items.length,
-      itemBuilder: _buildContacts,
+      itemCount: widget._food_items.length,
+      itemBuilder: _buildItems,
     );
   }
 
-  Widget _buildContacts(context, index) {
-    return FoodListItem(_food_items[index]);
+  Widget _buildItems(context, index) {
+    log("Building items");
+    return FoodListItem(widget._food_items[index], this);
+  }
+
+  void deleteItem(FoodItem item) {
+    setState(() {
+      widget._food_items.removeAt(widget._food_items.indexOf(item));
+    });
   }
 }
 
 class FoodListItem extends StatelessWidget {
-  const FoodListItem(this.item);
-
   final FoodItem item;
+  final _FoodListState parent_list;
+
+  const FoodListItem(this.item, this.parent_list);
 
   Widget _buildTiles(BuildContext context, FoodItem item) {
+    print(item.name);
     return ListTile(
       title: Text(item.name),
       onTap: () {
@@ -84,6 +75,9 @@ class FoodListItem extends StatelessWidget {
             },
           ),
         );
+      },
+      onLongPress: () {
+        parent_list.deleteItem(item);
       },
     );
   }
