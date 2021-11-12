@@ -24,11 +24,11 @@ class FoodList extends StatefulWidget {
   FoodList(this._food_items);
 
   @override
-  State<StatefulWidget> createState() => _FoodListState();
+  State<StatefulWidget> createState() => FoodListState();
 }
 
-class _FoodListState extends State<FoodList> {
-  _FoodListState();
+class FoodListState extends State<FoodList> {
+  FoodListState();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,6 @@ class _FoodListState extends State<FoodList> {
   }
 
   Widget _buildItems(context, index) {
-    log("Building items");
     return FoodListItem(widget._food_items[index], this);
   }
 
@@ -49,23 +48,28 @@ class _FoodListState extends State<FoodList> {
       widget._food_items.removeAt(widget._food_items.indexOf(item));
     });
   }
+
+  void updateItem(FoodItem old_item, FoodItem new_item) {
+    setState(() {
+      widget._food_items[widget._food_items.indexOf(old_item)] = new_item;
+    });
+  }
 }
 
 class FoodListItem extends StatelessWidget {
   final FoodItem item;
-  final _FoodListState parent_list;
+  final FoodListState parent_list;
 
   const FoodListItem(this.item, this.parent_list);
 
   Widget _buildTiles(BuildContext context, FoodItem item) {
-    print(item.name);
     return ListTile(
       title: Text(item.name),
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
-              return ItemViewPage(item: item);
+              return ItemViewPage(item: item, state: parent_list);
               // return Scaffold(
               //   appBar: AppBar(
               //     title: Text(contact.fullName)

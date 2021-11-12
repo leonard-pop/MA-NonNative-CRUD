@@ -19,4 +19,7 @@ List<FoodItem> dummyContent = <FoodItem>[
   FoodItem(id: 2, name: "Multigrain Bread", category: "Bread", expiryDate: "20/10/21",
       notificationInterval: "Daily", notifyBeforeCount: 15,
       notifyBeforeScale: "Days"),
+  FoodItem(id: 3, name: "Spaghetti", category: "Pasta", expiryDate: "20/10/21",
+      notificationInterval: "Daily", notifyBeforeCount: 15,
+      notifyBeforeScale: "Days"),
 ];
