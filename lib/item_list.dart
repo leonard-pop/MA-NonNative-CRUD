@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'item_details.dart';
+import 'item_add.dart';
 
 class ListPage extends StatelessWidget {
   @override
@@ -32,11 +33,29 @@ class FoodListState extends State<FoodList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      itemCount: widget._food_items.length,
-      itemBuilder: _buildItems,
-    );
+    return Scaffold(
+        body: ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          itemCount: widget._food_items.length,
+          itemBuilder: _buildItems),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return ItemAddPage(state: this);
+                  // return Scaffold(
+                  //   appBar: AppBar(
+                  //     title: Text(contact.fullName)
+                  //   ),
+                  //   body: Text('Hello'),
+                  // );
+                },
+              ),
+            );
+          }));
   }
 
   Widget _buildItems(context, index) {
@@ -52,6 +71,13 @@ class FoodListState extends State<FoodList> {
   void updateItem(FoodItem old_item, FoodItem new_item) {
     setState(() {
       widget._food_items[widget._food_items.indexOf(old_item)] = new_item;
+    });
+  }
+
+  void addItem(FoodItem new_item) {
+    setState(() {
+      new_item.id = widget._food_items.length;
+      widget._food_items.add(new_item);
     });
   }
 }
